@@ -30,15 +30,12 @@ public class MainActivity extends ActionBarActivity {
         mMessengerButton = findViewById(R.id.messenger_send_button);
 
         mToolbar.setTitle(R.string.app_name);
-        // If we received Intent.ACTION_PICK from Messenger, we were launched from a composer shortcut
-        // or the reply flow.
+        //
         Intent intent = getIntent();
         if (Intent.ACTION_PICK.equals(intent.getAction())) {
             mThreadParams = MessengerUtils.getMessengerThreadParamsForIntent(intent);
             mPicking = true;
 
-            // Note, if mThreadParams is non-null, it means the activity was launched from Messenger.
-            // It will contain the metadata associated with the original content, if there was content.
         }
 
         mMessengerButton.setOnClickListener(new View.OnClickListener() {
@@ -50,27 +47,23 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void onMessengerButtonClicked() {
-        // The URI can reference a file://, content://, or android.resource. Here we use
-        // android.resource for sample purposes.
+        // Esta uri puede referenciar muchas cosas como imagenes, archivos de sonido etc
         try {
             Uri uri =
                     Uri.parse("android.resource://org.campitos.facebookmessengersito/" + R.drawable.raton);
             //Uri.parse("http://campitos-ley.whelastic.net/soluciones/introduccion.jpg");
 
-            // Create the parameters for what we want to send to Messenger.
+            // Creamos los parametros de lo que queremos compratir en messenger
             ShareToMessengerParams shareToMessengerParams =
                     ShareToMessengerParams.newBuilder(uri, "image/png")
                             .setMetaData("{ \"image\" : \"tree\" }")
                             .build();
 
             if (mPicking) {
-                // If we were launched from Messenger, we call MessengerUtils.finishShareToMessenger to return
-                // the content to Messenger.
+
                 MessengerUtils.finishShareToMessenger(this, shareToMessengerParams);
             } else {
-                // Otherwise, we were launched directly (for example, user clicked the launcher icon). We
-                // initiate the broadcast flow in Messenger. If Messenger is not installed or Messenger needs
-                // to be upgraded, this will direct the user to the play store.
+                //Si mno esta instalado en messenger aqui saldra un emnsaje muy bonito
                 MessengerUtils.shareToMessenger(
                         this,
                         REQUEST_CODE_SHARE_TO_MESSENGER,
